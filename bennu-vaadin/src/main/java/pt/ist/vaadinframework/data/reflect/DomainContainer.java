@@ -28,10 +28,11 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
+import pt.ist.bennu.search.DomainIndexer;
+import pt.ist.bennu.search.Indexable;
+import pt.ist.bennu.search.queryBuilder.dsl.BuildingState;
+import pt.ist.bennu.search.queryBuilder.dsl.DSLState;
 import pt.ist.fenixframework.DomainObject;
-import pt.ist.fenixframework.plugins.luceneIndexing.DomainIndexer;
-import pt.ist.fenixframework.plugins.luceneIndexing.queryBuilder.dsl.BuildingState;
-import pt.ist.fenixframework.plugins.luceneIndexing.queryBuilder.dsl.DSLState;
 import pt.ist.vaadinframework.VaadinFrameworkLogger;
 import pt.ist.vaadinframework.data.AbstractBufferedContainer;
 import pt.ist.vaadinframework.data.LuceneContainer;
@@ -85,7 +86,8 @@ public class DomainContainer<Type extends DomainObject> extends AbstractBuffered
         removeAllItems();
         final DSLState expr = createFilterExpression(filterText);
         DateTime start = new DateTime();
-        final List<Type> searchResult = (List<Type>) DomainIndexer.getInstance().search(getElementType(), expr, maxHits);
+        final List<Type> searchResult =
+                (List<Type>) DomainIndexer.getInstance().search((Class<Indexable>) getElementType(), expr, maxHits);
         DateTime check1 = new DateTime();
         addItemBatch(searchResult);
         DateTime check2 = new DateTime();

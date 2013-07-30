@@ -7,10 +7,6 @@
     <ordering>
         <after>
             <!-- [START OF BENNU GENERATED FRAGMENT] -->
-            <name>bennu-core</name>
-            <name>fenix-web-framework</name>
-            <name>lucene-indexing-plugin</name>
-            <name>file-support-plugin</name>
             <!-- [END OF BENNU GENERATED FRAGMENT] -->
         </after>
         <before>
@@ -23,12 +19,6 @@
         <param-name>productionMode</param-name>
         <param-value>true</param-value>
     </context-param>
-
-    <servlet>
-        <servlet-name>EmbeddedApplicationInitializer</servlet-name>
-        <servlet-class>pt.ist.bennu.vaadin.EmbeddedApplicationInitializer</servlet-class>
-        <load-on-startup>3</load-on-startup>
-    </servlet>
 
     <servlet>
         <servlet-name>VaadinEmbedded</servlet-name>

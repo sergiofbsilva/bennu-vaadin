@@ -1,0 +1,42 @@
+<html>
+<head>
+	<script type="text/javascript" src="bankai/js/libs/mustache/mustache.js"></script>
+	<script type="text/javascript" src="bankai/js/libs/jquery/jquery.js"></script>
+	<script type="text/javascript" src="bennu-portal/portal.js"></script>
+</head>
+
+<body>
+		
+<div id="vaadin" class="v-app v-theme-{{theme}} v-app-EmbeddedApplication"></div>
+
+<script type="text/javascript">
+//<![CDATA[
+if(!vaadin || !vaadin.vaadinConfigurations) {
+ 	if(!vaadin) { var vaadin = {}} 
+	vaadin.vaadinConfigurations = {};
+	if (!vaadin.themesLoaded) { vaadin.themesLoaded = {}; }
+	document.write('<iframe tabIndex="-1" id="__gwt_historyFrame" style="position:absolute;width:0;height:0;border:0;overflow:hidden;" src="javascript:false"></iframe>');
+	document.write("<script language='javascript' src='/xpto/VAADIN/widgetsets/pt.ist.vaadinframework.widgetset.BennuWidgetSet/pt.ist.vaadinframework.widgetset.BennuWidgetSet.nocache.js'><\/script>");
+}
+vaadin.vaadinConfigurations["vaadin"] = {appUri:'/xpto/vaadin', standalone: true, themeUri:"/xpto/VAADIN/themes/{{theme}}", versionInfo : {vaadinVersion:"6.7.2",applicationVersion:"NONVERSIONED"}};
+//]]>
+</script>
+<script type="text/javascript">
+//<![CDATA[
+if(!vaadin.themesLoaded['{{theme}}']) {
+	var stylesheet = document.createElement('link');
+	stylesheet.setAttribute('rel', 'stylesheet');
+	stylesheet.setAttribute('type', 'text/css');
+	stylesheet.setAttribute('href', '/xpto/VAADIN/themes/{{theme}}/styles.css');
+	document.getElementsByTagName('head')[0].appendChild(stylesheet);
+	vaadin.themesLoaded['{{theme}}'] = true;
+}
+//]]>
+</script>
+<script type="text/javascript">
+//<![CDATA[
+setTimeout('if (typeof pt_ist_vaadinframework_widgetset_BennuWidgetSet == "undefined") {alert("Failed to load the widgetset: /xpto/VAADIN/widgetsets/pt_ist_vaadinframework_widgetset_BennuWidgetSet/pt_ist_vaadinframework_widgetset_BennuWidgetSet.nocache.js")};',15000);
+//]]>
+</script>	
+</body>
+</html>

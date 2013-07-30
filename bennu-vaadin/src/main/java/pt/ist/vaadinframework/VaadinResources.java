@@ -21,7 +21,7 @@
  */
 package pt.ist.vaadinframework;
 
-import pt.ist.bennu.core.util.BundleUtil;
+import pt.ist.bennu.core.i18n.BundleUtil;
 
 /**
  * @author Pedro Santos (pedro.miguel.santos@ist.utl.pt)
@@ -31,6 +31,6 @@ public class VaadinResources {
     private static final String BUNDLE_NAME = "resources/VaadinResources";
 
     public static String getString(String key, String... args) {
-        return BundleUtil.getFormattedStringFromResourceBundle(BUNDLE_NAME, key, args);
+        return BundleUtil.getString(BUNDLE_NAME, key, args);
     }
 }

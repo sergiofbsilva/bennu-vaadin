@@ -25,20 +25,17 @@ import java.lang.reflect.Field;
 import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedSet;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
-import org.joda.time.DateTime;
-
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
 import pt.ist.bennu.core.domain.VirtualHost;
-import pt.ist.bennu.core.domain.contents.Node;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
-import pt.ist.bennu.vaadin.domain.contents.VaadinNode;
-import pt.ist.fenixWebFramework.servlets.filters.SetUserViewFilter;
+import pt.ist.bennu.core.security.Authenticate;
+import pt.ist.bennu.vaadin.errorHandling.ReporterErrorWindow;
+import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
+import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
 import pt.ist.vaadinframework.annotation.EmbeddedComponentUtils;
 import pt.ist.vaadinframework.fragment.FragmentQuery;
 import pt.ist.vaadinframework.terminal.DefaultSystemErrorWindow;
@@ -137,6 +134,16 @@ public class EmbeddedApplication extends Application implements VaadinResourceCo
 
     private static SystemErrorWindow errorWindow = new DefaultSystemErrorWindow();
 
+    static {
+        RequestChecksumFilter.registerFilterRule(new ChecksumPredicate() {
+            @Override
+            public boolean shouldFilter(HttpServletRequest httpServletRequest) {
+                return !httpServletRequest.getRequestURI().endsWith("/vaadinContext.do");
+            }
+        });
+        EmbeddedApplication.registerErrorWindow(new ReporterErrorWindow());
+    }
+
     @Override
     public void init() {
         getContext().addTransactionListener(new TransactionListener() {
@@ -150,7 +157,7 @@ public class EmbeddedApplication extends Application implements VaadinResourceCo
                 application.setLocale(null);
             }
         });
-        setTheme(VirtualHost.getVirtualHostForThread().getTheme().getName());
+        setTheme(VirtualHost.getVirtualHostForThread().getConfiguration().getTheme());
         setMainWindow(new EmbeddedWindow());
     }
 
@@ -190,15 +197,7 @@ public class EmbeddedApplication extends Application implements VaadinResourceCo
     @Override
     public void close() {
         HttpSession session = ((WebApplicationContext) getContext()).getHttpSession();
-        final UserView userView = (UserView) session.getAttribute(SetUserViewFilter.USER_SESSION_ATTRIBUTE);
-
-        if (userView != null) {
-            userView.getUser().setLastLogoutDateTime(new DateTime());
-        }
-
-        pt.ist.fenixWebFramework.security.UserView.setUser(null);
-        session.removeAttribute(SetUserViewFilter.USER_SESSION_ATTRIBUTE);
-        session.invalidate();
+        Authenticate.logout(session);
         super.close();
     }
 
@@ -240,15 +239,15 @@ public class EmbeddedApplication extends Application implements VaadinResourceCo
     }
 
     public static Class<? extends EmbeddedComponentContainer> getPage(String path) {
-        if (path == null || StringUtils.isEmpty(path)) {
-            final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-            final SortedSet<Node> nodes = virtualHost.getOrderedTopLevelNodes();
-            for (final Node node : nodes) {
-                if (node.isAccessible() && node instanceof VaadinNode) {
-                    return pages.get(((VaadinNode) node).getArgument());
-                }
-            }
-        }
+//        if (path == null || StringUtils.isEmpty(path)) {
+//            final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
+//            final SortedSet<Node> nodes = virtualHost.getOrderedTopLevelNodes();
+//            for (final Node node : nodes) {
+//                if (node.isAccessible() && node instanceof VaadinNode) {
+//                    return pages.get(((VaadinNode) node).getArgument());
+//                }
+//            }
+//        }
         return pages.get(path);
     }
 

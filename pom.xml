@@ -21,7 +21,6 @@
     </scm>
 
     <modules>
-        <module>vaadin-embedded</module>
         <module>vaadin-framework</module>
         <module>bennu-vaadin</module>
     </modules>

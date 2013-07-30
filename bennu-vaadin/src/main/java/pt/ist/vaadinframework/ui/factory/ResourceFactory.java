@@ -1,8 +1,8 @@
 package pt.ist.vaadinframework.ui.factory;
 
 import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.groups.PersistentGroup;
-import pt.ist.bennu.core.domain.groups.SingleUserGroup;
+import pt.ist.bennu.core.domain.groups.legacy.PersistentGroup;
+import pt.ist.bennu.core.domain.groups.legacy.SingleUserGroup;
 
 import com.vaadin.terminal.ExternalResource;
 import com.vaadin.terminal.Resource;

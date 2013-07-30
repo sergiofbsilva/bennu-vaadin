@@ -26,9 +26,10 @@ package pt.ist.bennu.vaadin.errorHandling;
 
 import java.util.Collections;
 
-import pt.ist.bennu.core.applicationTier.Authenticate.UserView;
+import pt.ist.bennu.core.domain.Bennu;
 import pt.ist.bennu.core.domain.User;
-import pt.ist.bennu.core.domain.VirtualHost;
+import pt.ist.bennu.core.domain.VirtualHostAwarePortalConfiguration;
+import pt.ist.bennu.core.security.Authenticate;
 import pt.ist.vaadinframework.VaadinFrameworkLogger;
 import pt.ist.vaadinframework.VaadinResourceConstants;
 import pt.ist.vaadinframework.VaadinResources;
@@ -115,15 +116,15 @@ public class ReporterErrorWindow extends SystemErrorWindow implements VaadinReso
     }
 
     protected void sendEmail() {
-        final User user = UserView.getCurrentUser();
+        final User user = Authenticate.getUser();
 
         String fromName = null;
         if (user != null) {
             fromName = user.getPresentationName() + " (" + user.getUsername() + ")";
         }
 
-        final VirtualHost virtualHost = VirtualHost.getVirtualHostForThread();
-        final String supportEmailAddress = virtualHost.getSupportEmailAddress();
+        VirtualHostAwarePortalConfiguration.ensure();
+        final String supportEmailAddress = Bennu.getInstance().getConfiguration().getSupportEmailAddress();
 
         final String subject = "Error: " + systemError.getLocalizedMessage();
 
