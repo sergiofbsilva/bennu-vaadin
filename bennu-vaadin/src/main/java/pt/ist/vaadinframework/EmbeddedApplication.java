@@ -27,15 +27,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import pt.ist.bennu.core.domain.VirtualHost;
 import pt.ist.bennu.core.domain.exceptions.DomainException;
 import pt.ist.bennu.core.security.Authenticate;
 import pt.ist.bennu.vaadin.errorHandling.ReporterErrorWindow;
-import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter;
-import pt.ist.fenixWebFramework.servlets.filters.contentRewrite.RequestChecksumFilter.ChecksumPredicate;
 import pt.ist.vaadinframework.annotation.EmbeddedComponentUtils;
 import pt.ist.vaadinframework.fragment.FragmentQuery;
 import pt.ist.vaadinframework.terminal.DefaultSystemErrorWindow;
@@ -135,12 +132,6 @@ public class EmbeddedApplication extends Application implements VaadinResourceCo
     private static SystemErrorWindow errorWindow = new DefaultSystemErrorWindow();
 
     static {
-        RequestChecksumFilter.registerFilterRule(new ChecksumPredicate() {
-            @Override
-            public boolean shouldFilter(HttpServletRequest httpServletRequest) {
-                return !httpServletRequest.getRequestURI().endsWith("/vaadinContext.do");
-            }
-        });
         EmbeddedApplication.registerErrorWindow(new ReporterErrorWindow());
     }
 
